@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Квиток</title>
+
+<style>
+
+@font-face{
+    font-family:'Geometria';
+    src:url('./geometria_medium.otf');
+}
+
+body{
+    font-family:'Geometria';
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+body{
+    width:100%;
+    min-height:100vh;
+    background:#a8d9d5;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+}
+
+/* ОБЁРТКА */
+.phone{
+    position:relative;
+
+    width:100%;
+    max-width:430px;
+
+    aspect-ratio:828 / 1792;
+}
+
+/* ФОН */
+.bg{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+    user-select:none;
+    pointer-events:none;
+}
+
+/* БОРТОВОЙ НОМЕР */
+.board-number{
+    position:absolute;
+
+    top:17.6%;
+    right:8%;
+
+    font-size:clamp(15px, 2vw, 18px);
+    color:#000000;
+
+    font-weight:550;
+}
+
+/* КНОПКА ВВОДА */
+.input-btn{
+    position:absolute;
+
+    top:13%;
+    right:7%;
+
+    width:30%;
+    height:10%;
+
+    background:transparent;
+    border:none;
+    cursor:pointer;
+}
+
+/* ДАТА */
+.date{
+    position:absolute;
+
+    top:47.1%;
+    left:8%;
+
+    font-size:clamp(13px, 2vw, 13.4px);
+    color:#3e3d3d;
+
+    font-weight:550;
+}
+
+/* ТАЙМЕР */
+.timer{
+    position:absolute;
+
+    top:55%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    font-size:clamp(20px, 4vw, 17px);
+
+    font-weight:550;
+
+    color: #35a70c;
+}
+
+/* Чтобы текст не выделялся */
+.board-number,
+.date,
+.timer{
+    user-select:none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+    <!-- ФОНОВОЕ ФОТО -->
+    <img src="IMG_6803.png" class="bg">
+
+    <!-- КНОПКА -->
+    <button class="input-btn"></button>
+
+    <!-- БОРТОВОЙ -->
+    <div class="board-number" id="boardText"></div>
+
+    <!-- ДАТА -->
+    <div class="date" id="date"></div>
+
+    <!-- ТАЙМЕР -->
+    <div class="timer" id="timer">60:00</div>
+
+</div>
+
+<script>
+
+
+
+
+/* =========================
+   ВВОД БОРТОВОГО НОМЕРА
+========================= */
+
+const btn = document.querySelector('.input-btn');
+const boardText = document.getElementById('boardText');
+
+btn.addEventListener('click', () => {
+
+    const value = prompt('Введіть бортовий номер');
+
+    if(value !== null && value.trim() !== ''){
+
+        boardText.textContent = value;
+    }
+});
+
+
+
+
+
+
+/* =========================
+   ДАТА И ВРЕМЯ
+========================= */
+
+const months = [
+    "січ.",
+    "лют.",
+    "бер.",
+    "квіт.",
+    "трав.",
+    "черв.",
+    "лип.",
+    "серп.",
+    "вер.",
+    "жовт.",
+    "лист.",
+    "груд."
+];
+
+function updateDate(){
+
+    const now = new Date();
+
+    const day = now.getDate();
+
+    const month = months[now.getMonth()];
+
+    const hours = String(now.getHours()).padStart(2,'0');
+
+    const minutes = String(now.getMinutes()).padStart(2,'0');
+
+    document.getElementById('date').textContent =
+        `${day} ${month} ${hours}:${minutes}`;
+}
+
+updateDate();
+
+setInterval(updateDate, 1000);
+
+
+
+
+
+
+
+/* =========================
+   ТАЙМЕР 60:00
+========================= */
+
+let time = 60 * 60;
+
+const timer = document.getElementById('timer');
+
+function updateTimer(){
+
+    const minutes = Math.floor(time / 60);
+
+    const seconds = time % 60;
+
+    timer.textContent =
+        `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+
+    if(time > 0){
+        time--;
+    }
+}
+
+updateTimer();
+
+setInterval(updateTimer, 1000);
+
+</script>
+
+</body>
+</html>
